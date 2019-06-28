@@ -4,6 +4,7 @@
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
+/.vs/
 /Assets/AssetStoreTools*
 sysinfo.txt
 *.pidb.meta
