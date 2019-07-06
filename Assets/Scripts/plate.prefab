@@ -104,5 +104,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cube: {fileID: 1000013457341258, guid: 9f0392c61e532ad4884f8bbdc9fbe047, type: 2}
   statusActiv: 1
-  id: 24
+  id: 0
   statusBlock: 0

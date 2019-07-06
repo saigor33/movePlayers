@@ -23,6 +23,7 @@ public class DestroyCub : MonoBehaviour {
         //GetComponent<DrawPole>().pole[cubeID].name;
         GameObject.Find("plate" + cubeID).GetComponent<ListenerOnPlate>().statusBlock = false;
         Destroy(this.gameObject);
-        
+        GameObject.Find("DirectionalLight").GetComponent<DrawPole>().needRecalculation = true; //ставим флаг, что требуется перерасчёт пути
+
     }
 }

@@ -5,40 +5,69 @@ using System.Collections.Generic;
 public class DrawPole : MonoBehaviour {
 
     public GameObject plate;
-    public GameObject[] pole;
+    public GameObject[] gameField;
+    public  List<int> gameFieldActive;
+    public bool needRecalculation = true;
+    public bool statusUserClickOnStop = false;
 
-	// Use this for initialization
-	void Start () {
-        // cube = Instantiate()
-        //cube.GetComponent<Renderer>().material.color = Color.blue;
+    public GameObject playerPrefab;
+    public GameObject[] arrPlayers;
 
+    // Use this for initialization
+    void Start() {
         int count_obj = Random.Range(5, 10);
-        Debug.Log("Размер стороны(count_obj) ="+ count_obj);
+        Debug.Log("Размер стороны(count_obj) =" + count_obj);
 
-        pole = new GameObject[count_obj * count_obj];
-        float posX = plate.transform.localScale.x + plate.transform.localScale.x / 50;
-       // cube.
-        float posZ = 0; // cube.transform.localScale.z + cube.transform.localScale.z / 50;
-        float pozY = 0;
-        for (int i=0; i< pole.Length; i++)
+        gameField = new GameObject[count_obj * count_obj];
+        float posX = plate.transform.localScale.x+ plate.transform.localScale.x / 50; //
+        float posZ = 0;
+
+        float sizePoleX = count_obj* posX;
+        float sizePoleZ = count_obj*(plate.transform.localScale.z + plate.transform.localScale.z/50);
+        for (int i = 0; i < gameField.Length; i++)
         {
             if (i % count_obj == 0)
             {
-                posZ += plate.transform.localScale.z + plate.transform.localScale.z / 50;
+                posZ += plate.transform.localScale.z+ plate.transform.localScale.z / 50; //
             }
-            //pole[i]=Instantiate()
-            pole[i] = Instantiate(plate, new Vector3( posX*(i% count_obj), plate.transform.position.y, posZ),
+            gameField[i] = Instantiate(plate, new Vector3(posX * (i % count_obj), plate.transform.position.y, posZ),
                 Quaternion.identity) as GameObject;
-            //pole[i].GetComponent<Renderer>().material.color = Color.red;
-            //cube.
-            pole[i].GetComponent<ListenerOnPlate>().id = i;
-            pole[i].name = "plate" + i.ToString();
+            gameField[i].GetComponent<ListenerOnPlate>().id = i;
+            gameField[i].name = "plate" + i.ToString();
         }
-        GameObject.Find("player").GetComponent<playerScript>().getNextPosition();
-        Debug.Log("finish DrawPole");
+
+        GameObject.FindWithTag("MainCamera").transform.position = new Vector3(sizePoleX / 2f - sizePoleX / count_obj, sizePoleX*1.5f, sizePoleZ / 2f);
+        int count_player = Random.Range(1, 5);
+        arrPlayers = new GameObject[count_player];
+        for (int i=0; i< count_player; i++)
+        {
+            arrPlayers[i] = Instantiate(playerPrefab, new Vector3(gameField[i].transform.position.x, playerPrefab.transform.position.y, gameField[i].transform.position.z), 
+                Quaternion.identity) as GameObject;
+           /// arrPlayers[i].GetComponent<playerScript>().getNextPosition();
+        }
     }
-	// Update is called once per frame
-	void Update () {
-	 
-	}
+    void Update() {
+
+    }
+
+    public void closeGame()
+    {
+        Application.Quit();
+    }
+
+    public void pauseGame()
+    {
+        statusUserClickOnStop = !statusUserClickOnStop;
+       // Debug.Log("statusUserClickOnStop=" + statusUserClickOnStop.ToString());
+        if (statusUserClickOnStop == false)
+        {
+            for (int i = 0; i < arrPlayers.Length; i++)
+            {
+                arrPlayers[i].GetComponent<playerScript>().getNextPosition();
+                arrPlayers[i].name = "player" + i;
+            }
+
+        }
+    }
+
 }
