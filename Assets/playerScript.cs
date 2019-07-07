@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 public class playerScript : MonoBehaviour {
 
-    //public GameObject player;
+
+
     private Rigidbody playerRB;
     public GameObject dirLight; //для получения размерности массива
     public float speedPlayer;
@@ -21,11 +22,9 @@ public class playerScript : MonoBehaviour {
     private List<int> path = new List<int>();
 
     void Start() {
-        //player = GetComponent<GameObject>();
         playerRB = GetComponent<Rigidbody>();
         dirLight = GameObject.Find("DirectionalLight");
         getNextPosition();
-        //nextPosition();
     }
 
     // Update is called once per frame
@@ -41,7 +40,7 @@ public class playerScript : MonoBehaviour {
         if (dirLight.GetComponent<DrawPole>().needRecalculation)
         {
             path.Clear();
-            path = searchPatch(); //patch[patch.Count - 1]
+            path = searchPatch(); 
 
             if (path.Count == 0)
             {
@@ -59,11 +58,11 @@ public class playerScript : MonoBehaviour {
         }
         catch 
         {
-            Debug.Log("нет следующей цели. Остановка");
+            if(dirLight.GetComponent<DrawPole>().getLog)Debug.Log("нет следующей цели. Остановка");
             //playerRB.velocity = Vector3.zero;
             return;
         }
-        Debug.Log("patch[patch.Count - 1]=" + path[path.Count - 1] + " nextPoz =" + nextPoz.ToString());
+        if (dirLight.GetComponent<DrawPole>().getLog) Debug.Log("patch[patch.Count - 1]=" + path[path.Count - 1] + " nextPoz =" + nextPoz.ToString());
         speedX = nextPoz.x - transform.position.x;
         speedZ = nextPoz.z - transform.position.z;
         //Debug.Log("speedZ=" + speedZ.ToString());
@@ -84,7 +83,7 @@ public class playerScript : MonoBehaviour {
             playerRB.velocity = new Vector3(0, 0, speedZ) * speedPlayer; // z = finishPoz.z - transform.position.z
         }
 
-       //если игрок дошёл до клетки, удаляем её из списка
+       //если игрок дошёл до клетки, удаляем её из списка пути
         if (
             transform.position.x >= nextPoz.x - widthPlate / areaCenterPercentPlate
             && transform.position.x <= nextPoz.x + widthPlate / areaCenterPercentPlate
@@ -100,7 +99,7 @@ public class playerScript : MonoBehaviour {
                 str += " " + path[i];
             }
             playerRB.velocity = Vector3.zero;
-            Debug.Log("delete true: "+str);
+            if (dirLight.GetComponent<DrawPole>().getLog) Debug.Log("Клетка удалена. Путь: "+str);
         }
 
         //если персонаж находится на финешной плитки, а именно в areaCenterPercentPlate % от центра плитки, то считаем что персонаж дошёл до места
@@ -124,7 +123,6 @@ public class playerScript : MonoBehaviour {
 
     public void getNextPosition()
     {
-
         List<int> arr_gameFieldActive = dirLight.GetComponent<DrawPole>().gameFieldActive;
 
         if (arr_gameFieldActive.Count>0)
@@ -181,7 +179,7 @@ public class playerScript : MonoBehaviour {
             }
             str +=" "+ arrStatusPlates[i];
         }
-        Debug.Log("startIndex=" + startIndex+ "; str="+ str);
+        if (dirLight.GetComponent<DrawPole>().getLog) Debug.Log("startIndex=" + startIndex+ "; str="+ str);
         if(startIndex==-1)
         {
             return new_path;
@@ -274,8 +272,8 @@ public class playerScript : MonoBehaviour {
             if (step > countPlate)
             {
                 status = false;
-                Debug.Log("Нет подходящего пути");
-                return new_path;
+                if (dirLight.GetComponent<DrawPole>().getLog) Debug.Log("Нет подходящего пути");
+                return new_path; //возвращаем пустой лист
             }
 
         }
@@ -284,7 +282,7 @@ public class playerScript : MonoBehaviour {
         {
             strt += " "+arrStatusPlates[i];
         }
-        Debug.Log("Поиск пути= " + strt);
+        if (dirLight.GetComponent<DrawPole>().getLog) Debug.Log("Преобразованный массив для поиска пути: " + strt);
 
 
         return getPath(ref new_path, ref arrStatusPlates, ref lenghtPoleLine, ref countPlate);
@@ -342,7 +340,7 @@ public class playerScript : MonoBehaviour {
         {
             str += " " + path[i];
         }
-        Debug.Log("Востоновленный путь: "+ str);
+        if (dirLight.GetComponent<DrawPole>().getLog) Debug.Log("Востоновленный путь: "+ str);
 
         return path;
     }

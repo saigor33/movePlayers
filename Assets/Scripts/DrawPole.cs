@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class DrawPole : MonoBehaviour {
 
+    public bool getLog = false;
     public GameObject plate;
     public GameObject[] gameField;
     public  List<int> gameFieldActive;
@@ -16,7 +17,7 @@ public class DrawPole : MonoBehaviour {
     // Use this for initialization
     void Start() {
         int count_obj = Random.Range(5, 10);
-        Debug.Log("Размер стороны(count_obj) =" + count_obj);
+        if(getLog)Debug.Log("Размер стороны(count_obj) =" + count_obj);
 
         gameField = new GameObject[count_obj * count_obj];
         float posX = plate.transform.localScale.x+ plate.transform.localScale.x / 50; //
@@ -58,7 +59,7 @@ public class DrawPole : MonoBehaviour {
     public void pauseGame()
     {
         statusUserClickOnStop = !statusUserClickOnStop;
-       // Debug.Log("statusUserClickOnStop=" + statusUserClickOnStop.ToString());
+        // if(getLog)Debug.Log("statusUserClickOnStop=" + statusUserClickOnStop.ToString());
         if (statusUserClickOnStop == false)
         {
             for (int i = 0; i < arrPlayers.Length; i++)

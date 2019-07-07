@@ -18,9 +18,7 @@ public class DestroyCub : MonoBehaviour {
 
     private void OnMouseDown()
     {
-        Debug.Log("Destroy cube=" + cubeID);
-        //print ("this.gameObject.name="+this.gameObject.GetComponentInParent<GameObject>().name);
-        //GetComponent<DrawPole>().pole[cubeID].name;
+        if (GameObject.Find("DirectionalLight").GetComponent<DrawPole>().getLog) Debug.Log("Destroy cube=" + cubeID);
         GameObject.Find("plate" + cubeID).GetComponent<ListenerOnPlate>().statusBlock = false;
         Destroy(this.gameObject);
         GameObject.Find("DirectionalLight").GetComponent<DrawPole>().needRecalculation = true; //ставим флаг, что требуется перерасчёт пути
